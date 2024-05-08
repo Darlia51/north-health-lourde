@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import administratifs.AdministratifsAgenda;
-import professionnels.FenetreAccueilProfessionnels;
+import professionnels.ProfessionnelsConsultations;
 
 @SuppressWarnings("serial")
 public class Identification extends JFrame {
@@ -100,7 +100,7 @@ public class Identification extends JFrame {
 
                             if (resultSet.next()) {
                                 // Ouverture de la fenêtre correspondante
-                                FenetreAccueilProfessionnels fenetreAccueil = new FenetreAccueilProfessionnels();
+                            	ProfessionnelsConsultations fenetreAccueil = new ProfessionnelsConsultations();
                                 fenetreAccueil.setVisible(true);
                                 dispose(); // Fermeture de la fenêtre actuelle
                             } else {

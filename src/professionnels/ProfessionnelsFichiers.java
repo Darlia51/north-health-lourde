@@ -16,16 +16,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @SuppressWarnings("serial")
-public class ProfessionnelsConsultations extends JFrame {
+public class ProfessionnelsFichiers extends JFrame {
 
     private JLabel labelTitre;
     private JLabel labelUtilisateurConnecte;
     private JTable tableRendezVous;
 
     // Constructeur
-    public ProfessionnelsConsultations() {
+    public ProfessionnelsFichiers() {
         // Titre de la fenêtre
-        setTitle("North Health - Consultations");
+        setTitle("North Health - Fichiers d'intervention");
         // Taille de la fenêtre
         setSize(1366, 768);
         // Action fermeture de la fenêtre
@@ -73,30 +73,30 @@ public class ProfessionnelsConsultations extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         // Rendre la section Agenda active par défaut
-        consultationsBouton.setEnabled(false);
+        fichiersBouton.setEnabled(false);
 
         // Charger les données dans le tableau
         chargerDonneesRendezVous();
 
+        // Ajout d'un écouteur d'événements au bouton "Consultations"
+        consultationsBouton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Fermer la fenêtre actuelle
+                dispose();
+                // Ouvrir la fenêtre des patients
+                new ProfessionnelsConsultations().setVisible(true);
+            }
+        });
+        
         // Ajout d'un écouteur d'événements au bouton "Nouvelle intervention"
         interventionBouton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fermer la fenêtre actuelle
                 dispose();
-                // Ouvrir la fenêtre des patients
-                new NouvelleIntervention().setVisible(true);
-            }
-        });
-        
-        // Ajout d'un écouteur d'événements au bouton "Professionnels fichiers"
-        fichiersBouton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Fermer la fenêtre actuelle
-                dispose();
                 // Ouvrir la fenêtre des factures
-                new ProfessionnelsFichiers().setVisible(true);
+                new NouvelleIntervention().setVisible(true);
             }
         });
     }
@@ -110,32 +110,32 @@ public class ProfessionnelsConsultations extends JFrame {
             // Établir la connexion à la base de données
             connexion = ConnexionMySQL.getConnexion();
             // Créer la requête SQL pour récupérer les données de la vue
-            String requeteSQL = "SELECT * FROM consultation_professionnal_view";
+            String requeteSQL = "SELECT * FROM intervention_professionnal_view";
             statement = connexion.createStatement();
             resultSet = statement.executeQuery(requeteSQL);
 
-         // Créer le modèle de tableau
-            DefaultTableModel listeConsultations = new DefaultTableModel();
-            listeConsultations.addColumn("Date");
-            listeConsultations.addColumn("Heure");
-            listeConsultations.addColumn("Professionnel");
-            listeConsultations.addColumn("Type de consultation");
-            listeConsultations.addColumn("Patient");
-            listeConsultations.addColumn("Établissement");
+            // Créer le modèle de tableau
+            DefaultTableModel listeInterventions = new DefaultTableModel();
+            listeInterventions.addColumn("Date des actes");
+            listeInterventions.addColumn("Heure des actes");
+            listeInterventions.addColumn("Professionnel");
+            listeInterventions.addColumn("Type de consultation");
+            listeInterventions.addColumn("Patient");
+            listeInterventions.addColumn("Description");
 
             // Parcourir le résultat de la requête et ajouter les lignes au modèle de tableau
             while (resultSet.next()) {
-                String date = resultSet.getString("appointmentDate");
-                String heure = resultSet.getString("timeSlot");
+                String date = resultSet.getString("interventionDate");
+                String heure = resultSet.getString("interventionHour");
                 String professionnel = resultSet.getString("fullName");
                 String typeConsultation = resultSet.getString("consultationType");
                 String patient = resultSet.getString("patientName");
-                String etablissement = resultSet.getString("establishmentName");
-                listeConsultations.addRow(new Object[]{date, heure, professionnel,typeConsultation, patient, etablissement});
+                String description = resultSet.getString("interventionDescription");
+                listeInterventions.addRow(new Object[]{date, heure, professionnel,typeConsultation, patient, description});
             }
 
             // Définir le modèle de tableau pour la JTable
-            tableRendezVous.setModel(listeConsultations);
+            tableRendezVous.setModel(listeInterventions);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,13 +173,4 @@ public class ProfessionnelsConsultations extends JFrame {
         }
     }
    
-    public static void main(String[] args) {
-        // Création et affichage de la fenêtre
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ProfessionnelsConsultations().setVisible(true);
-            }
-        });
-    }
 }

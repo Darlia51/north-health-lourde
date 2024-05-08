@@ -101,12 +101,10 @@ public class AdministratifsFactures extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tableFactures);
         centralPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Création du panneau pour les boutons "Créer une facture" et "Supprimer une facture"
+        // Création du panneau pour les boutons "Créer une facture"
         JPanel boutonsPanel = new JPanel();
         JButton creerFactureButton = new JButton("Créer une facture");
-        JButton supprimerFactureButton = new JButton("Supprimer une facture");
         boutonsPanel.add(creerFactureButton);
-        boutonsPanel.add(supprimerFactureButton);
         centralPanel.add(boutonsPanel, BorderLayout.SOUTH);
 
         add(centralPanel, BorderLayout.CENTER);
@@ -137,7 +135,7 @@ public class AdministratifsFactures extends JFrame {
             // Établir la connexion à la base de données
             connexion = ConnexionMySQL.getConnexion();
             // Créer la requête SQL pour récupérer les données de la vue Facture_View
-            String requeteSQL = "SELECT * FROM Facture_View";
+            String requeteSQL = "SELECT * FROM facture_view";
             statement = connexion.createStatement();
             resultSet = statement.executeQuery(requeteSQL);
 
@@ -195,4 +193,15 @@ public class AdministratifsFactures extends JFrame {
             System.exit(0); // Fermer complètement l'application
         }
     }
+    
+    public static void main(String[] args) {
+        // Création et affichage de la fenêtre
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new AdministratifsFactures().setVisible(true);
+            }
+        });
+    }
+   
 }
